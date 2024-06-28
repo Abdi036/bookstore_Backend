@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware setup
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
 // creating connection to database
