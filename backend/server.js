@@ -23,6 +23,11 @@ mongoose
   .catch((err) => {
     console.error("DB connection Error:", err);
   });
+
+// Routes
+const booksRoute = require("./routes/booksRoute");
+app.use("/books", booksRoute);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
