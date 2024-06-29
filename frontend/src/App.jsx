@@ -15,7 +15,12 @@ export default function Header() {
       </div>
       <div className="border w-full h-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {data.map((book) => (
-          <Card key={book.id} title={book.title} author={book.author} />
+          <Card
+            key={book.id}
+            title={book.title}
+            author={book.author}
+            onClick={() => {}}
+          />
         ))}
       </div>
     </header>
