@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 
-// creating connection to database
+// Creating connection to the database
 const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DB_PASSWORD);
 mongoose
   .connect(DB)
@@ -22,7 +22,7 @@ mongoose
     console.log("DB connected successfully.");
   })
   .catch((err) => {
-    console.error("DB connection Error:", err);
+    console.error("DB connection error:", err);
   });
 
 // Routes
