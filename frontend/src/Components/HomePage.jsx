@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "./Button";
-import data from "/public/data.json";
+import { BookContext } from "../App";
 import Card from "./Card";
 import Modal from "./Modal";
 
 export default function HomePage() {
+  const { books, setBooks } = useContext(BookContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [books, setBooks] = useState(data);
   const [newBook, setNewBook] = useState({
     title: "",
     author: "",
     publicationYear: "",
     genre: "",
+    description: "",
     image: "",
   });
 
@@ -23,8 +24,20 @@ export default function HomePage() {
       author: "",
       publicationYear: "",
       genre: "",
+      description: "",
       image: "",
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewBook((prevState) => ({ ...prevState, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -35,14 +48,7 @@ export default function HomePage() {
         </h1>
       </div>
       <div className="p-5 w-full flex justify-end">
-        <Button
-          onClick={() => {
-            setIsModalOpen(true);
-            console.log("add book clicked");
-          }}
-        >
-          AddBook
-        </Button>
+        <Button onClick={() => setIsModalOpen(true)}>Add Book</Button>
       </div>
       <div className="border w-full h-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {books.map((book) => (
@@ -136,6 +142,23 @@ export default function HomePage() {
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={newBook.description}
+              onChange={(e) =>
+                setNewBook({ ...newBook, description: e.target.value })
+              }
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="image"
             >
               Image
@@ -143,12 +166,7 @@ export default function HomePage() {
             <input
               type="file"
               id="image"
-              onChange={(e) =>
-                setNewBook({
-                  ...newBook,
-                  image: URL.createObjectURL(e.target.files[0]),
-                })
-              }
+              onChange={handleImageChange}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             />
