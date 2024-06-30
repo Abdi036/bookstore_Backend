@@ -2,31 +2,49 @@
   {
     "id": 1,
     "title": "The Great Gatsby",
-    "author": "F. Scott Fitzgerald"
+    "author": "F. Scott Fitzgerald",
+    "description": "A novel set in the Jazz Age that tells the tragic story of Jay Gatsby and his unrequited love for Daisy Buchanan.",
+    "publicationYear": 1925,
+    "genre": "Fiction"
   },
   {
     "id": 2,
     "title": "To Kill a Mockingbird",
-    "author": "Harper Lee"
+    "author": "Harper Lee",
+    "description": "A novel about the serious issues of rape and racial inequality told through the eyes of young Scout Finch.",
+    "publicationYear": 1960,
+    "genre": "Fiction"
   },
   {
     "id": 3,
-    "title": "To Kill a Mockingbird",
-    "author": "Harper Lee"
+    "title": "To Kill a Mockingbird 3",
+    "author": "Harper Lee",
+    "description": "A novel about the serious issues of rape and racial inequality told through the eyes of young Scout Finch.",
+    "publicationYear": 1960,
+    "genre": "Fiction"
   },
   {
     "id": 4,
-    "title": "To Kill a Mockingbird",
-    "author": "Harper Lee"
+    "title": "To Kill a Mockingbird 4",
+    "author": "Harper Lee",
+    "description": "A novel about the serious issues of rape and racial inequality told through the eyes of young Scout Finch.",
+    "publicationYear": 1960,
+    "genre": "Fiction"
   },
   {
     "id": 5,
-    "title": "To Kill a Mockingbird",
-    "author": "Harper Lee"
+    "title": "To Kill a Mockingbird 5",
+    "author": "Harper Lee",
+    "description": "A novel about the serious issues of rape and racial inequality told through the eyes of young Scout Finch.",
+    "publicationYear": 1960,
+    "genre": "Fiction"
   },
   {
     "id": 6,
     "title": "1984",
-    "author": "George Orwell"
+    "author": "George Orwell",
+    "description": "A dystopian novel set in a totalitarian society ruled by Big Brother.",
+    "publicationYear": 1949,
+    "genre": "Dystopia"
   }
 ]
