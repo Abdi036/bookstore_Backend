@@ -62,6 +62,7 @@ export default function HomePage() {
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <form
+          className="py-10"
           onSubmit={(e) => {
             e.preventDefault();
             handleAddBook();
@@ -147,12 +148,15 @@ export default function HomePage() {
               Description
             </label>
             <textarea
+              cols="30"
+              rows="3"
               id="description"
               value={newBook.description}
               onChange={(e) =>
                 setNewBook({ ...newBook, description: e.target.value })
               }
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              style={{ resize: "vertical" }}
               required
             />
           </div>

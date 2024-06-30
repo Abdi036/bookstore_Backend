@@ -4,15 +4,15 @@ export default function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
   return (
-    <div className=" fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="w-[40%] bg-white p-20 py-60 rounded shadow-lg relative">
+    <div className="fixed inset-0 flex justify-center items-center bg-gray-600 bg-opacity-50">
+      <div className="w-[40%] bg-white rounded shadow-lg p-8 relative mt-[50px] mb-[50px]">
         <button
           onClick={onClose}
-          className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 font-bold"
+          className="absolute top-16 right-1 text-gray-500 font-bold mr-4 mt-2"
         >
           &times;
         </button>
-        {children}
+        <div className="py-6">{children}</div>
       </div>
     </div>
   );
