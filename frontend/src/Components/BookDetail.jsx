@@ -1,144 +1,6 @@
-// import React, { useEffect, useState } from "react";
-// import { useParams, Link, useNavigate } from "react-router-dom";
-// import Button from "./Button";
-// import data from "/public/data.json";
-// import Modal from "./Modal";
-
-// export default function BookDetail() {
-//   const { id } = useParams();
-//   const [book, setBook] = useState(null);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [updatedBook, setUpdatedBook] = useState({});
-//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const bookDetails = data.find((book) => book.id === parseInt(id));
-//     setBook(bookDetails);
-//     setUpdatedBook(bookDetails);
-//   }, [id]);
-
-//   if (!book) {
-//     return <div>Loading...</div>;
-//   }
-
-//   const handleUpdate = () => {
-//     const updatedData = data.map((b) => (b.id === book.id ? updatedBook : b));
-//     setBook(updatedBook);
-//     setIsEditing(false);
-//   };
-
-//   const handleDelete = () => {
-//     const updatedData = data.filter((b) => b.id !== book.id);
-//     navigate("/");
-//   };
-
-//   return (
-//     <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-100 relative">
-//       <Link to="/" className="absolute top-4 left-4 text-xl text-gray-700">
-//         &larr; Back
-//       </Link>
-//       <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-//         <img
-//           className="w-full"
-//           src={
-//             "/marvels_spider_man_miles_morales_ps4_and_ps5_video_game_2-wallpaper-1366x768.jpg"
-//           }
-//           alt={`cover`}
-//         />
-//         <div className="px-6 py-4">
-//           {isEditing ? (
-//             <>
-//               <input
-//                 type="text"
-//                 value={updatedBook.title}
-//                 onChange={(e) =>
-//                   setUpdatedBook({ ...updatedBook, title: e.target.value })
-//                 }
-//                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-//               />
-//               <input
-//                 type="text"
-//                 value={updatedBook.author}
-//                 onChange={(e) =>
-//                   setUpdatedBook({ ...updatedBook, author: e.target.value })
-//                 }
-//                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-//               />
-//               <input
-//                 type="text"
-//                 value={updatedBook.genre}
-//                 onChange={(e) =>
-//                   setUpdatedBook({ ...updatedBook, genre: e.target.value })
-//                 }
-//                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-//               />
-//               <input
-//                 type="number"
-//                 value={updatedBook.publicationYear}
-//                 onChange={(e) =>
-//                   setUpdatedBook({
-//                     ...updatedBook,
-//                     publicationYear: e.target.value,
-//                   })
-//                 }
-//                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-//               />
-//               <textarea
-//                 value={updatedBook.description}
-//                 onChange={(e) =>
-//                   setUpdatedBook({
-//                     ...updatedBook,
-//                     description: e.target.value,
-//                   })
-//                 }
-//                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-//               />
-//               <Button onClick={handleUpdate}>Save</Button>
-//             </>
-//           ) : (
-//             <>
-//               <div className="font-bold text-xl mb-2">{book.title}</div>
-//               <p className="text-gray-700 text-base">
-//                 <strong>Author:</strong> {book.author}
-//               </p>
-//               <p className="text-gray-700 text-base">
-//                 <strong>Genre:</strong> {book.genre}
-//               </p>
-//               <p className="text-gray-700 text-base">
-//                 <strong>Publication Year:</strong> {book.publicationYear}
-//               </p>
-//               <p className="text-gray-700 text-base">{book.description}</p>
-//             </>
-//           )}
-//         </div>
-//         <div className="flex justify-around p-5">
-//           {isEditing ? (
-//             <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-//           ) : (
-//             <Button onClick={() => setIsEditing(true)}>Update</Button>
-//           )}
-//           <Button onClick={() => setIsDeleteModalOpen(true)}>Delete</Button>
-//         </div>
-//       </div>
-//       <Modal
-//         isOpen={isDeleteModalOpen}
-//         onClose={() => setIsDeleteModalOpen(false)}
-//       >
-//         <div className="p-5">
-//           <p>Are you sure you want to delete this book?</p>
-//           <div className="flex justify-around mt-5">
-//             <Button onClick={handleDelete}>Yes</Button>
-//             <Button onClick={() => setIsDeleteModalOpen(false)}>No</Button>
-//           </div>
-//         </div>
-//       </Modal>
-//     </div>
-//   );
-// }
-
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import axios from "../../axios";
 import Button from "./Button";
 import { BookContext } from "../App";
 import Modal from "./Modal";
@@ -153,126 +15,139 @@ export default function BookDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const bookDetails = books.find((book) => book.id === parseInt(id));
-    setBook(bookDetails);
-    setUpdatedBook(bookDetails);
-  }, [id, books]);
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(`/books/${id}`);
+        setBook(response.data);
+        setUpdatedBook(response.data);
+      } catch (error) {
+        console.error("Error fetching book:", error);
+      }
+    };
+
+    fetchBook();
+  }, [id]);
 
   if (!book) {
     return <div>Loading...</div>;
   }
 
-  const handleUpdate = () => {
-    const updatedData = books.map((b) => (b.id === book.id ? updatedBook : b));
-    setBooks(updatedData);
-    setBook(updatedBook);
-    setIsEditing(false);
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.patch(`/books/${id}`, updatedBook);
+      const updatedData = books.map((b) => (b._id === id ? response.data : b));
+      setBooks(updatedData);
+      setBook(response.data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
   };
 
-  const handleDelete = () => {
-    const updatedData = books.filter((b) => b.id !== book.id);
-    setBooks(updatedData);
-    navigate("/");
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/books/${id}`);
+      const updatedData = books.filter((b) => b._id !== id);
+      setBooks(updatedData);
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    }
   };
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-100 relative">
-      <Link to="/" className="absolute top-4 left-4 text-xl text-gray-700">
-        &larr; Back
-      </Link>
-      <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+      <div className="w-9/12 bg-white shadow-md rounded-md p-5 flex flex-col">
+        <div className="flex justify-between">
+          <Link to="/">
+            <Button>&larr;Back</Button>
+          </Link>
+          <div>
+            <Button onClick={() => setIsEditing(!isEditing)}>
+              {isEditing ? "Cancel" : "Edit"}
+            </Button>
+            <Button onClick={() => setIsDeleteModalOpen(true)}>Delete</Button>
+          </div>
+        </div>
+        <h1 className="text-3xl font-bold mt-5">{book.title}</h1>
         <img
-          className="w-full"
-          src={
-            book.image ||
-            "/marvels_spider_man_miles_morales_ps4_and_ps5_video_game_2-wallpaper-1366x768.jpg"
-          }
-          alt={`${book.title} cover`}
+          src={book.image}
+          alt={book.title}
+          className="w-40 h-60 object-cover mt-4"
         />
-        <div className="px-6 py-4">
-          {isEditing ? (
-            <>
-              <input
-                type="text"
-                value={updatedBook.title}
-                onChange={(e) =>
-                  setUpdatedBook({ ...updatedBook, title: e.target.value })
-                }
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-              />
-              <input
-                type="text"
-                value={updatedBook.author}
-                onChange={(e) =>
-                  setUpdatedBook({ ...updatedBook, author: e.target.value })
-                }
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-              />
-              <input
-                type="text"
-                value={updatedBook.genre}
-                onChange={(e) =>
-                  setUpdatedBook({ ...updatedBook, genre: e.target.value })
-                }
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-              />
-              <input
-                type="number"
-                value={updatedBook.publicationYear}
-                onChange={(e) =>
-                  setUpdatedBook({
-                    ...updatedBook,
-                    publicationYear: e.target.value,
-                  })
-                }
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-              />
-              <textarea
-                value={updatedBook.description}
-                onChange={(e) =>
-                  setUpdatedBook({
-                    ...updatedBook,
-                    description: e.target.value,
-                  })
-                }
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
-              />
-              <Button onClick={handleUpdate}>Save</Button>
-            </>
-          ) : (
-            <>
-              <div className="font-bold text-xl mb-2">{book.title}</div>
-              <p className="text-gray-700 text-base">
-                <strong>Author:</strong> {book.author}
-              </p>
-              <p className="text-gray-700 text-base">
-                <strong>Genre:</strong> {book.genre}
-              </p>
-              <p className="text-gray-700 text-base">
-                <strong>Publication Year:</strong> {book.publicationYear}
-              </p>
-              <p className="text-gray-700 text-base">{book.description}</p>
-            </>
-          )}
-        </div>
-        <div className="flex justify-around p-5">
-          {isEditing ? (
-            <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-          ) : (
-            <Button onClick={() => setIsEditing(true)}>Update</Button>
-          )}
-          <Button onClick={() => setIsDeleteModalOpen(true)}>Delete</Button>
-        </div>
+        {isEditing ? (
+          <>
+            <label className="mt-4">Title:</label>
+            <input
+              type="text"
+              value={updatedBook.title}
+              onChange={(e) =>
+                setUpdatedBook({ ...updatedBook, title: e.target.value })
+              }
+            />
+            <label className="mt-4">Author:</label>
+            <input
+              type="text"
+              value={updatedBook.author}
+              onChange={(e) =>
+                setUpdatedBook({ ...updatedBook, author: e.target.value })
+              }
+            />
+            <label className="mt-4">Publication Year:</label>
+            <input
+              type="number"
+              value={updatedBook.publicationYear}
+              onChange={(e) =>
+                setUpdatedBook({
+                  ...updatedBook,
+                  publicationYear: e.target.value,
+                })
+              }
+            />
+            <label className="mt-4">Genre:</label>
+            <input
+              type="text"
+              value={updatedBook.genre}
+              onChange={(e) =>
+                setUpdatedBook({ ...updatedBook, genre: e.target.value })
+              }
+            />
+            <label className="mt-4">Description:</label>
+            <textarea
+              value={updatedBook.description}
+              onChange={(e) =>
+                setUpdatedBook({
+                  ...updatedBook,
+                  description: e.target.value,
+                })
+              }
+            />
+            <Button onClick={handleUpdate} className="mt-4">
+              Save Changes
+            </Button>
+          </>
+        ) : (
+          <>
+            <h2 className="text-xl font-semibold mt-4">
+              Author: {book.author}
+            </h2>
+            <p className="mt-2">Published Year: {book.publishYear}</p>
+            <p className="mt-2">Genre: {book.Genre}</p>
+            <p className="mt-2">Description: {book.Description}</p>
+          </>
+        )}
       </div>
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
       >
         <div className="p-5">
-          <p>Are you sure you want to delete this book?</p>
-          <div className="flex justify-around mt-5">
-            <Button onClick={handleDelete}>Yes</Button>
-            <Button onClick={() => setIsDeleteModalOpen(false)}>No</Button>
+          <h2 className="text-xl font-bold mb-4">
+            Are you sure you want to delete this book?
+          </h2>
+          <div className="flex justify-between">
+            <Button onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
+            <Button onClick={handleDelete}>Delete</Button>
           </div>
         </div>
       </Modal>

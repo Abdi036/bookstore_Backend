@@ -7,13 +7,12 @@ const mongoose = require("mongoose");
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
 // Middleware setup
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
 
+const PORT = process.env.PORT || 3000;
 // Creating connection to the database
 const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DB_PASSWORD);
 mongoose

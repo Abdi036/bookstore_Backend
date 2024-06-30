@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
 // Route for Save a new Book
 router.post("/", async (req, res) => {
-  const { title, author, publishYear, Description, Genre } = req.body;
+  const { title, author, publishYear, Description, Genre, image } = req.body;
   if (!title || !author || !publishYear) {
     return res
       .status(400)
@@ -31,6 +31,7 @@ router.post("/", async (req, res) => {
       publishYear,
       Description,
       Genre,
+      image,
     });
     const savedBook = await newBook.save();
     res.status(201).json({ status: "success", savedBook });

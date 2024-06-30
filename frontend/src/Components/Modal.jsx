@@ -8,7 +8,7 @@ export default function Modal({ isOpen, onClose, children }) {
       <div className="w-[40%] bg-white rounded shadow-lg p-8 relative mt-[50px] mb-[50px]">
         <button
           onClick={onClose}
-          className="absolute top-16 right-1 text-gray-500 font-bold mr-4 mt-2"
+          className="absolute top-20 right-1 text-gray-500 font-bold mr-4 mt-2"
         >
           &times;
         </button>

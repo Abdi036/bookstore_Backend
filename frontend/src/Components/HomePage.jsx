@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import axios from "../../axios";
 import Button from "./Button";
 import { BookContext } from "../App";
 import Card from "./Card";
@@ -13,20 +14,39 @@ export default function HomePage() {
     publicationYear: "",
     genre: "",
     description: "",
-    image: "",
+    image:""
   });
 
-  const handleAddBook = () => {
-    setBooks([...books, { ...newBook, id: books.length + 1 }]);
-    setIsModalOpen(false);
-    setNewBook({
-      title: "",
-      author: "",
-      publicationYear: "",
-      genre: "",
-      description: "",
-      image: "",
-    });
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get("/books");
+        setBooks(response.data.data);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+
+    fetchBooks();
+  }, [setBooks]);
+
+  const handleAddBook = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/books", newBook);
+      setBooks([...books, response.data]);
+      setIsModalOpen(false);
+      setNewBook({
+        title: "",
+        author: "",
+        publicationYear: "",
+        genre: "",
+        description: "",
+        image:""
+      });
+    } catch (error) {
+      console.error("Error adding book:", error);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -53,21 +73,16 @@ export default function HomePage() {
       <div className="border w-full h-auto p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {books.map((book) => (
           <Card
-            key={book.id}
-            id={book.id}
+            key={book._id}
+            id={book._id}
             title={book.title}
             author={book.author}
+            image={book.image}
           />
         ))}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <form
-          className="py-10"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleAddBook();
-          }}
-        >
+        <form className="py-10" onSubmit={handleAddBook}>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -148,8 +163,8 @@ export default function HomePage() {
               Description
             </label>
             <textarea
-              cols="30"
-              rows="3"
+              cols="5"
+              rows="5"
               id="description"
               value={newBook.description}
               onChange={(e) =>
@@ -172,7 +187,6 @@ export default function HomePage() {
               id="image"
               onChange={handleImageChange}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
             />
           </div>
           <div className="flex items-center justify-between">

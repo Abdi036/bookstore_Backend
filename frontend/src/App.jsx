@@ -1,28 +1,23 @@
-import React, { createContext, useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import React, { useState, createContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./Components/HomePage";
 import BookDetail from "./Components/BookDetail";
-import data from "../public/data.json";
 
 export const BookContext = createContext();
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "book/:id",
-    element: <BookDetail />,
-  },
-]);
-
-export default function App() {
-  const [books, setBooks] = useState(data);
+function App() {
+  const [books, setBooks] = useState([]);
 
   return (
     <BookContext.Provider value={{ books, setBooks }}>
-      <RouterProvider router={router} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/book/:id" element={<BookDetail />} />
+        </Routes>
+      </Router>
     </BookContext.Provider>
   );
 }
+
+export default App;
