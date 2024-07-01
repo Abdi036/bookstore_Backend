@@ -70,11 +70,7 @@ export default function BookDetail() {
           </div>
         </div>
         <h1 className="text-3xl font-bold mt-5">{book.title}</h1>
-        <img
-          src={book.image}
-          alt={book.title}
-          className="w-40 h-60 object-cover mt-4"
-        />
+
         {isEditing ? (
           <>
             <label className="mt-4">Title:</label>
