@@ -4,6 +4,7 @@ import axios from "../../axios";
 import Button from "./Button";
 import { BookContext } from "../App";
 import Modal from "./Modal";
+import Popup from "./Popup";
 
 export default function BookDetail() {
   const { id } = useParams();
@@ -12,6 +13,7 @@ export default function BookDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedBook, setUpdatedBook] = useState({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +41,11 @@ export default function BookDetail() {
       setBooks(updatedData);
       setBook(response.data);
       setIsEditing(false);
+
+      setIsNotificationVisible(true);
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 2000);
     } catch (error) {
       console.error("Error updating book:", error);
     }
@@ -50,6 +57,11 @@ export default function BookDetail() {
       const updatedData = books.filter((b) => b._id !== id);
       setBooks(updatedData);
       navigate("/");
+
+      setIsNotificationVisible(true);
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 2000);
     } catch (error) {
       console.error("Error deleting book:", error);
     }
@@ -60,14 +72,8 @@ export default function BookDetail() {
       <div className="w-9/12 bg-white shadow-md rounded-md p-5 flex flex-col">
         <div className="flex justify-between">
           <Link to="/">
-            <Button>&larr;Back</Button>
+            <Button>&larr; Back</Button>
           </Link>
-          <div>
-            <Button onClick={() => setIsEditing(!isEditing)}>
-              {isEditing ? "Cancel" : "Edit"}
-            </Button>
-            <Button onClick={() => setIsDeleteModalOpen(true)}>Delete</Button>
-          </div>
         </div>
         <h1 className="text-3xl font-bold mt-5">{book.title}</h1>
 
@@ -92,29 +98,29 @@ export default function BookDetail() {
             <label className="mt-4">Publication Year:</label>
             <input
               type="number"
-              value={updatedBook.publicationYear}
+              value={updatedBook.publishYear}
               onChange={(e) =>
                 setUpdatedBook({
                   ...updatedBook,
-                  publicationYear: e.target.value,
+                  publishYear: e.target.value,
                 })
               }
             />
             <label className="mt-4">Genre:</label>
             <input
               type="text"
-              value={updatedBook.genre}
+              value={updatedBook.Genre}
               onChange={(e) =>
-                setUpdatedBook({ ...updatedBook, genre: e.target.value })
+                setUpdatedBook({ ...updatedBook, Genre: e.target.value })
               }
             />
             <label className="mt-4">Description:</label>
             <textarea
-              value={updatedBook.description}
+              value={updatedBook.Description}
               onChange={(e) =>
                 setUpdatedBook({
                   ...updatedBook,
-                  description: e.target.value,
+                  Description: e.target.value,
                 })
               }
             />
@@ -132,6 +138,13 @@ export default function BookDetail() {
             <p className="mt-2">Description: {book.Description}</p>
           </>
         )}
+
+        <div className="py-5">
+          <Button className="mx-5" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? "Cancel" : "Edit"}
+          </Button>
+          <Button onClick={() => setIsDeleteModalOpen(true)}>Delete</Button>
+        </div>
       </div>
       <Modal
         isOpen={isDeleteModalOpen}
@@ -147,6 +160,11 @@ export default function BookDetail() {
           </div>
         </div>
       </Modal>
+      {isNotificationVisible && (
+        <Popup className="fixed bottom-4 left-4 bg-green-400 text-white p-4 rounded shadow-lg">
+          Book Edited successfully
+        </Popup>
+      )}
     </div>
   );
 }
